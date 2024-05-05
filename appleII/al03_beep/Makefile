@@ -10,18 +10,26 @@ SRC = al03_beep.s
 OUTPUT = al03_beep
 
 # Default target
-all: $(OUTPUT)
+all: $(OUTPUT) dsk
 
 # Rule to assemble the source file into a binary
 $(OUTPUT): $(SRC)
 	$(AS) $(SRC) 
 
-dsk:
-	../tools/linapple/build/bin/linapple
+linapple:
+	../tools/linapple/build/bin/linapple -b --d1 ../tools/dos33.dsk --d2 al03.dsk
+
+dsk: 
+	java -jar ../tools/AppleCommander-acx-1.9.0.jar mkdisk -d al03.dsk -n al03 --dos
+	java -jar ../tools/AppleCommander-acx-1.9.0.jar import -d al03.dsk al03_beep --raw -n AL03BEEP
+
+
+
 # Clean up
 clean:
 	rm  $(OUTPUT)
 	rm _FileInformation.txt
+	rm al03.dsk
 
 # Phony targets
 .PHONY: all clean
